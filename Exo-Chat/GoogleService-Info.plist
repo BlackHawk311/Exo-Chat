@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>372343662515-4v3vn191gm0o67d981f1pv24u8lbilct.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.372343662515-4v3vn191gm0o67d981f1pv24u8lbilct</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCnchWtfDy2ok9fuTBGXCb086K_oCxCa1Q</string>
+	<key>GCM_SENDER_ID</key>
+	<string>372343662515</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>Salim.Exo-Chat</string>
+	<key>PROJECT_ID</key>
+	<string>exo-chat-c6787</string>
+	<key>STORAGE_BUCKET</key>
+	<string>exo-chat-c6787.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:372343662515:ios:3ca6d09a59c44a4e</string>
+	<key>DATABASE_URL</key>
+	<string>https://exo-chat-c6787.firebaseio.com</string>
+</dict>
+</plist>
