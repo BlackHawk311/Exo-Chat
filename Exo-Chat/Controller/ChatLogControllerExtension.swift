@@ -17,11 +17,6 @@ extension ChatLogController: UITextFieldDelegate {
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillhide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        handleSendButton()
-        return true
-    }
-    
     @objc func handleKeyboardDidShow() {
         if messages.count > 0 {
 //            let indexPath = IndexPath(item: messages.count - 1, section: 0)

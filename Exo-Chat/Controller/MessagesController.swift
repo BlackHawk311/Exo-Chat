@@ -67,77 +67,24 @@ class MessagesController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
         let message = self.messages[indexPath.row]
         
-        guard let currentUserUid = Auth.auth().currentUser?.uid else {
-            return
-        }
-        
-        guard let chatPartnerId = message.chatPartnerId() else {
-            return
-        }
-        
-        while chatPartnerId == message.chatPartnerId() {
-            let messageId = message.getMessageId()
-            let currentUserMessagesNode = Database.database().reference().child("userMessages").child(currentUserUid).child(chatPartnerId)
-            currentUserMessagesNode.removeValue(completionBlock: { (error, ref) in
+        if let chatParterId = message.chatPartnerId() {
+            Database.database().reference().child("userMessages").child(uid).child(chatParterId).removeValue(completionBlock: { (error, ref) in
+                
                 if error != nil {
-                    print("Failed to delete message :", error as Any)
+                    print("Failed to delete message:", error!)
                     return
                 }
                 
-                Database.database().reference().child("messages").child(messageId!).removeValue(completionBlock: { (error, ref) in
-                    if error != nil {
-                        print("Failed to delete message :", error as Any)
-                        return
-                    }
-                })
-            })
-            
-            let chatPartnerMessagesNode = Database.database().reference().child("userMessages").child(chatPartnerId).child(currentUserUid)
-            chatPartnerMessagesNode.removeValue(completionBlock: { (error, ref) in
-                if error != nil {
-                    print("Failed to delete message :", error as Any)
-                    return
-                }
+                self.messagesDictionary.removeValue(forKey: chatParterId)
+                self.attemptReloadOfTable()
             })
         }
-        
-        self.messagesDictionary.removeValue(forKey: chatPartnerId)
-        self.attemptReloadOfTable()
-        
-//        if let chatPartnerId = message.chatPartnerId() {
-//            Database.database().reference().child("userMessages").child(currentUserUid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
-//                if error != nil {
-//                    print("Failed to delete message :", error as Any)
-//                    return
-//                }
-//
-//                if message.getImageUrl() != nil {
-//                    Storage.storage().reference().child("messageImage").child(message.getImageUrl()!).delete(completion: { (error) in
-//                        if error != nil {
-//                            print("Failed to delete image :", error as Any)
-//                            return
-//                        }
-//                    })
-//                } else if message.getVideoUrl() != nil {
-//                    Storage.storage().reference().child("messageVideos").child(message.getVideoUrl()!).delete(completion: { (error) in
-//                        if error != nil {
-//                            print("Failed to delete video :", error as Any)
-//                            return
-//                        }
-//                    })
-//                }
-//                Database.database().reference().child("messages").child(message.getMessageId()!).removeValue(completionBlock: { (error, ref) in
-//                    if error != nil {
-//                        print("Failed to delete message :", error as Any)
-//                        return
-//                    }
-//                })
-//                self.messagesDictionary.removeValue(forKey: chatPartnerId)
-//                self.attemptReloadOfTable()
-//            })
-//        }
     }
     
     func setupNavBarWithUser(_ user: User) {

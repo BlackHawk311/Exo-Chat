@@ -15,65 +15,10 @@ class ChatLogController: UICollectionViewController, UICollectionViewDelegateFlo
     
     let cellId = "cellId"
     
-    lazy var inputTextField: UITextField = {
-        let inputTextField = UITextField()
-        inputTextField.placeholder = "Write message..."
-        inputTextField.translatesAutoresizingMaskIntoConstraints = false
-        inputTextField.delegate = self
-        return inputTextField
-    }()
-    
-    lazy var inputContainerView: UIView = {
-        let inputContainerView = UIView()
-        inputContainerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 55)
-        inputContainerView.backgroundColor = UIColor.white
-        inputContainerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let separatorLineView = UIView()
-        separatorLineView.backgroundColor = UIColor(red: 230, green: 230, blue: 230)
-        separatorLineView.translatesAutoresizingMaskIntoConstraints = false
-        
-        inputContainerView.addSubview(separatorLineView)
-        
-        separatorLineView.leftAnchor.constraint(equalTo: inputContainerView.leftAnchor).isActive = true
-        separatorLineView.topAnchor.constraint(equalTo: inputContainerView.topAnchor).isActive = true
-        separatorLineView.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
-        separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
-        let uploadImageView = UIImageView()
-        uploadImageView.image = UIImage(named: "addImage")
-        uploadImageView.isUserInteractionEnabled = true
-        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
-        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
-        
-        inputContainerView.addSubview(uploadImageView)
-        
-        uploadImageView.leftAnchor.constraint(equalTo: inputContainerView.leftAnchor).isActive = true
-        uploadImageView.centerYAnchor.constraint(equalTo: inputContainerView.centerYAnchor).isActive = true
-        uploadImageView.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        uploadImageView.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        
-        let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: UIControl.State())
-        sendButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        sendButton.translatesAutoresizingMaskIntoConstraints = false
-        sendButton.addTarget(self, action: #selector(handleSendButton), for: .touchUpInside)
-        
-        inputContainerView.addSubview(sendButton)
-        
-        sendButton.rightAnchor.constraint(equalTo: inputContainerView.rightAnchor).isActive = true
-        sendButton.centerYAnchor.constraint(equalTo: inputContainerView.centerYAnchor).isActive = true
-        sendButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor, multiplier: 1/4).isActive = true
-        sendButton.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor).isActive = true
-        
-        inputContainerView.addSubview(self.inputTextField)
-        
-        self.inputTextField.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
-        self.inputTextField.centerYAnchor.constraint(equalTo: inputContainerView.centerYAnchor).isActive = true
-        self.inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
-        self.inputTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor).isActive = true
-        
-        return inputContainerView
+    lazy var inputContainerView: ChatInputContainerView = {
+        let chatInputContainerView = ChatInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 55))
+        chatInputContainerView.chatLogController = self
+        return chatInputContainerView
     }()
     
     var user: User? {
@@ -242,7 +187,7 @@ class ChatLogController: UICollectionViewController, UICollectionViewDelegateFlo
     }
     
     @objc func handleSendButton() {
-        let properties = ["text": inputTextField.text!]
+        let properties = ["text": inputContainerView.inputTextField.text!]
         sendMessageWithProperties(properties as [String : AnyObject])
     }
     
@@ -320,7 +265,7 @@ class ChatLogController: UICollectionViewController, UICollectionViewDelegateFlo
                 print(error!)
                 return
             }
-            self.inputTextField.text = nil
+            self.inputContainerView.inputTextField.text = nil
             
             guard let messageId = childRef.key else { return }
             
